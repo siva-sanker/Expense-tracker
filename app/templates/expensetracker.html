@@ -1,0 +1,56 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expense Tracker</title>
+    <link rel="shortcut icon" href="{% static 'images/expense.png' %}" type="image/x-icon">
+    <link rel="stylesheet" href="{% static 'css/expensetracker.css' %}">
+</head>
+<body>
+    <div class="heading">
+        <h1>Welcome {{ username }}</h1>
+        <div class="add-category">
+            <a href="{% url 'add' %}">Add Category</a>
+            <a href="{% url 'logout' %}">LogOut</a>
+        </div>
+    </div>
+
+    <div class="main">
+        <form method="post">
+            {% csrf_token %}
+            <h1>Track Your Expenses</h1>
+            <br>
+            <div class="input-box">
+                <input type="number" name="price" placeholder="Price" required>
+                <select name="category" required>
+                    <option value="">Type of expense</option>
+                    {% for i in categories %}
+                    <option value="{{ i.id }}">{{ i.name }}</option>
+                    {% endfor %}
+                </select>
+                <br>
+                <button type="submit">Add Expense</button>
+            </div>
+        </form>
+
+        <table>
+            <tr>
+                <th>Category</th>
+                <th>Price</th>
+            </tr>
+            {% for expense in expenses %}
+            <tr>
+                <td>{{ expense.category.name }}</td>
+                <td>{{ expense.price }}</td>
+            </tr>
+            {% endfor %}
+            <tr>
+                <td colspan="1" style="text-align: center; color: red; font-weight: 700;">Net Total Expense</td>
+                <td style="text-align: center; color: red; font-weight: 700;">$ {{ total_expense }}</td>
+            </tr>
+        </table>
+    </div>
+</body>
+</html>

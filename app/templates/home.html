@@ -1,0 +1,31 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expense Tracker</title>
+    <link rel="shortcut icon" href="{% static 'images/favicon.png' %}" type="image/x-icon">
+    <link rel="stylesheet" href="{% static 'css/homestyle.css' %}">
+</head>
+<body>
+    <header><h1>Expense Tracker</h1></header>
+    <section class="home">
+        <div class="main">
+            <div class="content">
+                <div class="subheading1"><h2>Track your Expenses Effortlessly  !</h2></div>
+                <div class="content-sub">
+                    <h3>Stay in control of your finances.</h3>
+                    <p>Managing your expenses has never been easier! With our intuitive expense tracker, you can categorize your spending, analyze your habits, and take control of your financial future. Whether it's food, travel, or other daily expenses, let us help you stay organized and stress-free.</p>
+                </div>
+                <div class="buttondiv"><button onclick="location.href='{% url 'signup' %}'">Get Started</button></div>
+            </div>
+            <div class="img-div">
+                <img src="{% static 'images/img2.png' %}" alt="image" loading="lazy">
+            </div>
+        </div>
+
+    </section>
+
+</body>
+</html>

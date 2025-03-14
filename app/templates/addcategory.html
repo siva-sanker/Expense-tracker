@@ -1,0 +1,27 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="{% static 'css/addcategory.css' %}">
+</head>
+<body>
+    <div class="addcategory">
+        <form method="post">
+            {% csrf_token %}
+            <div class="heading"><h1>Add Your Category</h1></div>
+
+            <div class="input-box">
+                <input type="text" name="category" placeholder="Add Your Category">
+                <button type="submit">Add Category</button>
+            </div>
+            
+        </form>
+    </div>
+    {% for category in c %}
+    <p style="display: inline; margin: 10px;">{{ category.c_name }}</p>
+{% endfor %}
+</body>
+</html>
