@@ -65,6 +65,7 @@ form h1{
     font-size: 20px;
 }
 .input-box button{
+    display: inline-flex;
     padding: 14px;
     width: 330px;
     border-radius: 10px;
@@ -75,6 +76,20 @@ form h1{
     font-family: 'Times New Roman', Times, serif;
     font-size: 20px;
 }
+
+.categorywise{
+    width: 100%;
+    text-align: center;
+}
+.categorywise ul li{
+    display: inline-flex;
+    margin: 50px;
+    text-transform: capitalize;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 20px;
+    list-style: none;
+}
+
 table {
     width: 100%;
     border-collapse: collapse;

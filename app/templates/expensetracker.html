@@ -22,18 +22,30 @@
             {% csrf_token %}
             <h1>Track Your Expenses</h1>
             <br>
+
             <div class="input-box">
-                <input type="number" name="price" placeholder="Price" required>
+                <input type="number" name="price" placeholder="Price" required step="0.01">
                 <select name="category" required>
                     <option value="">Type of expense</option>
                     {% for i in categories %}
                     <option value="{{ i.id }}">{{ i.name }}</option>
                     {% endfor %}
-                </select>
-                <br>
-                <button type="submit">Add Expense</button>
+                </select> <br>
+                <button type="submit" name="add_expense">Add Expense</button>
+                <button type="submit" name="delete_expense" formnovalidate>Clear</button>
+                <button type="submit" name="delete_one" formnovalidate>Delete Recent</button>
             </div>
-        </form>
+            
+        </form>    
+    </div>
+    <div class="categorywise">
+        <h1>Category Wise Totals</h1>
+        <ul>
+            {% for i in category_wise_sum %}
+            <li> {{ i.category__name }} : $ {{ i.total }}</li>
+            {% endfor %}
+        </ul>
+    </div>
 
         <table>
             <tr>
@@ -51,6 +63,5 @@
                 <td style="text-align: center; color: red; font-weight: 700;">$ {{ total_expense }}</td>
             </tr>
         </table>
-    </div>
 </body>
 </html>

@@ -5,6 +5,7 @@ from django.contrib.auth import logout
 from django.contrib.auth.hashers import make_password
 from django.urls import reverse
 from django.http import HttpResponse
+from django.db.models import Sum
 from .models import Category,Expense
 
 def home(request):
@@ -56,24 +57,41 @@ def signup(request):
 
 
 def expense(request):
+
     username=request.session.get('username',None)
     categories=Category.objects.all()
+
     if request.method=='POST':
-        price=request.POST['price']
-        cat_id=request.POST['category']
+        if 'add_expense' in request.POST:
+            price=float(request.POST['price'])
+            cat_id=request.POST['category']
+        
+            category=Category.objects.get(id=cat_id)
 
-        category=Category.objects.get(id=cat_id)
+            Expense.objects.create(category=category,price=price,user=request.user)
 
-        Expense.objects.create(category=category,price=price)
+            return redirect('expense')
+        
+        elif 'delete_expense' in request.POST:
+            Expense.objects.filter(user=request.user).delete()
+            return redirect('expense')
+        elif 'delete_one' in request.POST:
+            item=Expense.objects.order_by("-id").first()    #?????
+            if item:
+                item.delete()
+    
+    expenses=Expense.objects.filter(user=request.user)
 
-        return redirect('expense')
-    expenses=Expense.objects.all()
-    total_expense=sum(expense.price for expense in expenses)
+    total_expense=sum(float(expense.price) for expense in expenses)
+
+    category_sum=(Expense.objects.filter(user=request.user).values('category__name').annotate(total=Sum('price')))
+
     return render(request,'expensetracker.html',{
         'username':username,
         'categories':categories,
         'expenses':expenses,
-        'total_expense':total_expense})
+        'total_expense':total_expense,
+        'category_wise_sum':category_sum})
 
 def logout_user(request):
     logout(request)
