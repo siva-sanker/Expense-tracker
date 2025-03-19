@@ -8,7 +8,7 @@ A simple and efficient web application for tracking your daily expenses and mana
 
 ✅ Add and categorize expenses easily.  
 ✅ View detailed expense history.  
-✅ Analyze spending with charts and graphs.  [tbd]
+✅ Analyze spending with charts and graphs [tbd].  
 ✅ User-friendly and responsive design.  
 
 ---
