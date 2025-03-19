@@ -9,23 +9,30 @@
     <link rel="stylesheet" href="{% static 'css/homestyle.css' %}">
 </head>
 <body>
-    <header><h1>Expense Tracker</h1></header>
-    <section class="home">
+    <div class="container">
+        <header>
+            <h1>💸 Expense Tracker</h1>
+            <p>Track your expenses easily and stay on top of your finances.</p>
+        </header>
+
+        <!-- Main Content Section -->
         <div class="main">
             <div class="content">
-                <div class="subheading1"><h2>Track your Expenses Effortlessly  !</h2></div>
-                <div class="content-sub">
-                    <h3>Stay in control of your finances.</h3>
-                    <p>Managing your expenses has never been easier! With our intuitive expense tracker, you can categorize your spending, analyze your habits, and take control of your financial future. Whether it's food, travel, or other daily expenses, let us help you stay organized and stress-free.</p>
+                <h2>Track Expenses Effortlessly!</h2>
+                <p>Take control of your spending habits with our intuitive and easy-to-use expense tracker. Monitor, categorize, and analyze your expenses to make smarter financial decisions.</p>
+                <div class="buttondiv">
+                    <button onclick="location.href='{% url 'signup' %}'">Get Started</button>
                 </div>
-                <div class="buttondiv"><button onclick="location.href='{% url 'signup' %}'">Get Started</button></div>
             </div>
             <div class="img-div">
                 <img src="{% static 'images/img2.png' %}" alt="image" loading="lazy">
             </div>
         </div>
 
-    </section>
-
+        <footer>
+            <p>© 2025 Expense Tracker. All Rights Reserved.</p>
+        </footer>
+    </div>
+    
 </body>
 </html>

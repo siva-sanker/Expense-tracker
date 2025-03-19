@@ -1,154 +1,192 @@
-body{
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    background: linear-gradient(90deg, #e2e2e2, #f6ffc9);
-    background-repeat: no-repeat;
+/* General Reset */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f7fc; /* Light gray background */
+    color: #333; /* Dark text for readability */
 }
-.heading{
+
+/* Heading Section */
+.heading {
     display: flex;
-    text-align: center;
     justify-content: space-between;
-    width: 100%;
+    align-items: center;
+    padding: 15px 20px;
+    background-color: #4CAF50; /* Green header */
+    color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
-.heading h1{
-    margin: auto;
-    text-transform: uppercase;
+
+.heading h1 {
+    margin: 0;
+    font-size: 1.8em;
 }
-.heading .add-category{
+
+.heading .add-category button, .heading .add-category button:hover {
+    background-color: white;
+    color: #4CAF50;
+    border: none;
+    font-weight: bold;
+    transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.heading .add-category button:hover {
+    transform: scale(1.05); /* Slight hover effect */
+    color: #388e3c; /* Slightly darker green */
+}
+
+.heading form button {
+    background-color: #e53935; /* Red logout button */
+    color: white;
+    border: none;
+    font-weight: bold;
+    padding: 6px 10px;
+    cursor: pointer;
+}
+
+.heading form button:hover {
+    background-color: #b71c1c; /* Darker red for hover */
+}
+
+/* Main Content Area */
+.main {
     display: flex;
-    flex-wrap: wrap;
-    width: fit-content;
-    height: fit-content;
-    float: right;
-    margin-top: 4px;
-    /* border: 1px solid black; */
-}
-.heading .add-category a{
-    text-decoration: none;
-    color: black;
-}
-.add-category a:nth-child(2){
-    margin-left: 20px;
-}
-.main{
-    display: flex;
-    flex-wrap: wrap;
-    justify-items: stretch;
+    flex-direction: column;
+    align-items: center;
     width: 90%;
-    height: auto;
-    /* border: 1px solid black; */
-    /* border-radius: 10px; */
-    margin-left: 5%;
-    margin-top: 1%;
+    margin: 20px auto;
+    padding: 25px;
+    background-color: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
-.main form{
-    /* display: block; */
+
+/* Balance Form */
+.balanceform {
     width: 100%;
-    /* align-items: center; */
-    text-align: center;
-    /* border: 1px solid red; */
+    max-width: 600px;
+    margin-bottom: 20px;
 }
-form h1{
-    text-align: center;
-}
-.input-box{
-    /* border: 1px solid black; */
+
+.balanceform form input:not(input[type='submit']) {
+    width: 100%;
     padding: 10px;
-}
-.input-box input,select{
-    padding: 14px;
-    width: 300px;
-    border-radius: 10px;
-    border: none;
-    margin: 25px;
-    font-family: 'Times New Roman', Times, serif;
-    font-size: 20px;
-}
-.input-box button{
-    display: inline-flex;
-    padding: 14px;
-    width: 220px;
-    border-radius: 10px;
-    border: none;
-    background-color: #e1e93e;
-    text-transform: uppercase;
-    justify-content: center;
-    margin: 10px;
-    font-family: 'Times New Roman', Times, serif;
-    font-size: 20px;
+    margin-bottom: 12px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
 }
 
-.categorywise{
+.balanceform input[type='submit'] {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.balanceform input[type='submit']:hover {
+    background-color: #388e3c; /* Slightly darker green */
+}
+
+.balance {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 15px;
     width: 100%;
+    margin-top: 15px;
     text-align: center;
 }
-.categorywise ul li{
-    display: inline-flex;
-    margin: 20px;
-    text-transform: capitalize;
-    font-family: 'Times New Roman', Times, serif;
-    font-size: 20px;
-    list-style: none;
+
+.balance .curbal, .balance .netbal {
+    padding: 15px;
+    border-radius: 5px;
+    background-color: #f4f7fc; /* Subtle background for balances */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    font-weight: bold;
 }
 
+/* Expense Tracker Form */
+.input-box input, select {
+    padding: 10px;
+    width: 250px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin: 10px 0;
+}
+
+.input-box button {
+    padding: 13px 30px;
+    margin-left: 26px;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+    font-weight: bold;
+    background-color: #4CAF50;
+    color: white;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.input-box button:hover {
+    background-color: #388e3c;
+    transform: scale(1.05);
+}
+
+/* Category Section */
+.categorywise {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.categorywise ul {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.categorywise ul li {
+    margin: 10px 15px;
+    font-size: 16px;
+    padding: 8px 12px;
+    background-color: #4CAF50;
+    color: white;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Table Styling */
 table {
     width: 100%;
     border-collapse: collapse;
-    margin: 20px 0;
-    font-size: 18px;
-    text-align: left;
-    border: 1px solid #ddd;
+    margin-top: 20px;
 }
-th, td {
+
+table th, table td {
     padding: 12px;
+    text-align: center;
     border: 1px solid #ddd;
-}
-th {
-    background-color: #f4f4f4;
-}
-tbody tr:nth-child(even) {
-    background-color: #f9f9f9;
-}
-tbody tr:hover {
-    background-color: #f1f1f1;
+    font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+    font-size: 14px;
 }
 
+table th {
+    background-color: #4CAF50;
+    color: white;
+}
 
-.balanceform{
-    /* display: grid;
-    grid-template-columns: 1fr 1fr; */
-    /* border: 1px solid black; */
-    margin-top: 3%;
-    width: 80%;
-    height: 150px;
-    margin-left: 10%;
-    padding: 0;
+table td:hover {
+    background-color: #f4f7fc;
 }
-.balanceform form{
-    float: left;
-    /* border: 1px solid; */
-    width: fit-content;
-}
-.balanceform form input{
-    display: block;
-    margin: 10px;
-    padding: 10px;
-}
-.balance{
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    float: right;
-    width: fit-content;
-    /* border: 1px solid; */
-}
-.curbal{
-    text-align: center;
-    border: none;
-    border-right: 1px solid black;
-    padding: 10px;
-}
-.netbal{
-    text-align: center;
-    padding: 10px;
+
+table tr:last-child td {
+    font-weight: bold;
+    color: #e53935; /* Highlighting net total expense */
 }

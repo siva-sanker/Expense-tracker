@@ -124,14 +124,23 @@ def logout_user(request):
     ''')
 
 def addc(request):
-    if request.method=='POST':
-        name=request.POST['category']
-        c=Category(name=name)
-        c.save()
-        return HttpResponse('''
-        <script>
-            alert("Category Added Successfully!");
-            window.location.href = "/expense/";
-        </script>
-    ''')
-    return render(request,'addcategory.html')
+    if request.method == 'POST':
+        name = request.POST.get('category')
+        if name:
+            # Check if the category already exists
+            if not Category.objects.filter(name=name).exists():
+                Category.objects.create(name=name)
+                return HttpResponse('''
+                    <script>
+                        alert("Category Added Successfully! ✅");
+                        window.location.href = "/expense";
+                    </script>
+                ''')
+            else:
+                return HttpResponse('''
+                    <script>
+                        alert("Category already exists! ❗");
+                        window.location.href = "/expense";
+                    </script>
+                ''')
+    return redirect('expense')

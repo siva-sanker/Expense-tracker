@@ -7,19 +7,54 @@
     <title>Expense Tracker</title>
     <link rel="shortcut icon" href="{% static 'images/expense.png' %}" type="image/x-icon">
     <link rel="stylesheet" href="{% static 'css/expensetracker.css' %}">
+    
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
 </head>
 <body>
     <div class="heading">
         <h1>Welcome {{ username }}</h1>
         <div class="add-category">
-            <a href="{% url 'add' %}">Add Category</a>
-            <a href="{% url 'logout' %}">Log Out</a>
+            <!-- Button to Open Modal -->
+        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#addCategoryModal">
+                ➕ Add Category
+            </button>
+            <div class="modal fade" id="addCategoryModal" tabindex="-1" role="dialog" aria-labelledby="addCategoryModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="addCategoryModalLabel" style="color: black;">➕ Add New Category</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+
+                        <!-- Form Inside Modal -->
+                        <div class="modal-body">
+                            <form id="addCategoryForm" method="post" action="{% url 'add' %}">
+                                {% csrf_token %}
+                                <div class="form-group">
+                                    <label for="categoryName" style="color: black;">Category Name</label>
+                                    <input type="text" class="form-control" id="categoryName" name="category" placeholder="Enter category name" required>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Add Category</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <form method="post" action="{% url 'logout' %}" style="display: inline;">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">Log Out</button>
+            </form>
+            
         </div>
     </div>
 
     <div class="main">
 
-        <div class="balanceform" id="balanceForm">
+        <div class="balanceform">
             <form action="" method="post">
                 {% csrf_token %}
                 <input type="number" name="bal" placeholder="Enter balance">
@@ -36,6 +71,7 @@
                 </div>
             </div>
         </div>
+        
         <form method="post">
             {% csrf_token %}
             <h1>Track Your Expenses</h1>
@@ -81,5 +117,8 @@
                 <td style="text-align: center; color: red; font-weight: 700;">$ {{ total_expense }}</td>
             </tr>
         </table>
+
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
