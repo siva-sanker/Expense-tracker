@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Big+Shoulders:opsz,wght@10..72,100..900&family=Kalnia+Glaze:wght@100..700&family=Shadows+Into+Light&display=swap');
 
 body{
-    background: linear-gradient(90deg, #e2e2e2, #ebf6b5);
+    /* background: linear-gradient(90deg, #e2e2e2, #ebf6b5); */
     color: black;
 }
 header{

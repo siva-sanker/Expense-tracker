@@ -6,7 +6,7 @@ from django.contrib.auth.hashers import make_password
 from django.urls import reverse
 from django.http import HttpResponse
 from django.db.models import Sum
-from .models import Category,Expense
+from .models import Category,Expense,Balance
 
 def home(request):
     return render(request,'home.html')
@@ -62,7 +62,15 @@ def expense(request):
     categories=Category.objects.all()
 
     if request.method=='POST':
-        if 'add_expense' in request.POST:
+        if 'bal' in request.POST:
+            amount=request.POST.get('bal')
+            if amount:
+                Balance.objects.update_or_create(
+                    user=request.user,
+                    defaults={'balance': amount}
+                )
+        
+        elif 'add_expense' in request.POST:
             price=float(request.POST['price'])
             cat_id=request.POST['category']
         
@@ -75,6 +83,7 @@ def expense(request):
         elif 'delete_expense' in request.POST:
             Expense.objects.filter(user=request.user).delete()
             return redirect('expense')
+        
         elif 'delete_one' in request.POST:
             item=Expense.objects.order_by("-id").first()    #?????
             if item:
@@ -82,7 +91,14 @@ def expense(request):
     
     expenses=Expense.objects.filter(user=request.user)
 
+    try:
+        b=Balance.objects.get(user=request.user)
+    except Balance.DoesNotExist:
+        b=None
+
     total_expense=sum(float(expense.price) for expense in expenses)
+
+    remaining_balance = b.balance - total_expense if b else 0 
 
     category_sum=(Expense.objects.filter(user=request.user).values('category__name').annotate(total=Sum('price')))
 
@@ -91,9 +107,14 @@ def expense(request):
         'categories':categories,
         'expenses':expenses,
         'total_expense':total_expense,
-        'category_wise_sum':category_sum})
+        'category_wise_sum':category_sum,
+        'bal':b,
+        'remaining':remaining_balance})
 
 def logout_user(request):
+    if request.user.is_authenticated: 
+        Balance.objects.filter(user=request.user).delete()
+ 
     logout(request)
     return HttpResponse('''
         <script>

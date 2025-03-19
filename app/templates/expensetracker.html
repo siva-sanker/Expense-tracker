@@ -13,11 +13,29 @@
         <h1>Welcome {{ username }}</h1>
         <div class="add-category">
             <a href="{% url 'add' %}">Add Category</a>
-            <a href="{% url 'logout' %}">LogOut</a>
+            <a href="{% url 'logout' %}">Log Out</a>
         </div>
     </div>
 
     <div class="main">
+
+        <div class="balanceform" id="balanceForm">
+            <form action="" method="post">
+                {% csrf_token %}
+                <input type="number" name="bal" placeholder="Enter balance">
+                <input type="submit" value="Go">
+            </form>
+            <div class="balance">
+                <div class="curbal">
+                    <label for="">Your balance</label>
+                    <p>${{ bal.balance }}</p>
+                </div>
+                <div class="netbal">
+                    <label for="">Remaining balance</label>
+                    <p>${{ remaining }}</p>
+                </div>
+            </div>
+        </div>
         <form method="post">
             {% csrf_token %}
             <h1>Track Your Expenses</h1>
