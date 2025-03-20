@@ -35,7 +35,7 @@
                                 {% csrf_token %}
                                 <div class="form-group">
                                     <label for="categoryName" style="color: black;">Category Name</label>
-                                    <input type="text" class="form-control" id="categoryName" name="category" placeholder="Enter category name" required>
+                                    <input type="text" class="form-control" id="categoryName" name="category" placeholder="Enter category name" required maxlength="50">
                                 </div>
                                 <button type="submit" class="btn btn-primary">Add Category</button>
                             </form>
@@ -57,28 +57,28 @@
         <div class="balanceform">
             <form action="" method="post">
                 {% csrf_token %}
-                <input type="number" name="bal" placeholder="Enter balance">
+                <input type="number" name="bal" placeholder="Enter balance" min="0">
                 <input type="submit" value="Go">
             </form>
             <div class="balance">
                 <div class="curbal">
                     <label for="">Your balance</label>
-                    <p>${{ bal.balance }}</p>
+                    <p>{{ bal.balance }} INR</p>
                 </div>
                 <div class="netbal">
                     <label for="">Remaining balance</label>
-                    <p>${{ remaining }}</p>
+                    <p>{{ remaining }} INR</p>
                 </div>
             </div>
         </div>
         
         <form method="post">
             {% csrf_token %}
-            <h1>Track Your Expenses</h1>
+            <div class="track"><h1>Track Your Expenses</h1></div>
             <br>
 
             <div class="input-box">
-                <input type="number" name="price" placeholder="Price" required step="0.01">
+                <input type="number" name="price" placeholder="Price" required step="0.01" min="0">
                 <select name="category" required>
                     <option value="">Type of expense</option>
                     {% for i in categories %}
@@ -96,24 +96,32 @@
         <h1>Category Wise Totals</h1>
         <ul>
             {% for i in category_wise_sum %}
-            <li> {{ i.category__name }} : $ {{ i.total }}</li>
+            <li> {{ i.category__name }} :  {{ i.total }} INR</li>
             {% endfor %}
         </ul>
     </div>
 
+    <div class="download-div">
+        <form action="{% url 'export_csv' %}" method="get">
+            <button type="submit" class="btn btn-info">Download CSV</button>
+        </form>
+    </div>
+    
         <table>
             <tr>
                 <th>Category</th>
                 <th>Price</th>
+                <th>Created At</th>
             </tr>
             {% for expense in expenses %}
             <tr>
                 <td>{{ expense.category.name }}</td>
                 <td>{{ expense.price }}</td>
+                <td> {{ expense.created_at }}</td>
             </tr>
             {% endfor %}
             <tr>
-                <td colspan="1" style="text-align: center; color: red; font-weight: 700;">Net Total Expense</td>
+                <td colspan="2" style="text-align: center; color: red; font-weight: 700;">Net Total Expense</td>
                 <td style="text-align: center; color: red; font-weight: 700;">$ {{ total_expense }}</td>
             </tr>
         </table>

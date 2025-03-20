@@ -25,4 +25,5 @@ urlpatterns = [
     path('expense/',views.expense,name='expense'),
     path('logout/',views.logout_user,name='logout'),
     path('addc/',views.addc,name='add'),
+    path('export_csv/', views.export_expenses_to_csv, name='export_csv'),
 ]

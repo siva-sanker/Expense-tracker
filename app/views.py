@@ -7,6 +7,7 @@ from django.urls import reverse
 from django.http import HttpResponse
 from django.db.models import Sum
 from .models import Category,Expense,Balance
+import csv
 
 def home(request):
     return render(request,'home.html')
@@ -110,6 +111,24 @@ def expense(request):
         'category_wise_sum':category_sum,
         'bal':b,
         'remaining':remaining_balance})
+
+
+def export_expenses_to_csv(request):
+    
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="expenses.csv"'
+
+    
+    writer = csv.writer(response)
+    writer.writerow(['Category', 'Price','Created_At'])  
+
+   
+    expenses = Expense.objects.filter(user=request.user)
+
+    for expense in expenses:
+        writer.writerow([expense.category.name, expense.price, expense.created_at])  
+
+    return response
 
 def logout_user(request):
     if request.user.is_authenticated: 
