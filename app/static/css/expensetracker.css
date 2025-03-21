@@ -204,3 +204,43 @@ table tr:last-child td {
     font-weight: bold;
     color: #e53935; /* Highlighting net total expense */
 }
+
+.charts {
+    width: 90%; /* Reduce the overall width for better responsiveness */
+    margin: 20px auto; /* Center the charts section */
+    text-align: center;
+    padding: 20px;
+    border: 2px solid #ddd; /* Add a subtle border */
+    border-radius: 10px; /* Rounded corners */
+    background-color: #f9f9f9; /* Soft background color */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add a shadow effect */
+}
+
+.chart-heading {
+    margin-bottom: 20px;
+    font-family: 'Arial', sans-serif;
+    color: #333;
+}
+
+.chart-grid {
+    display: flex;
+    flex-wrap: wrap; /* Ensure charts adjust for smaller screens */
+    justify-content: center; /* Center charts horizontally */
+    gap: 40px; /* Space between the charts */
+    padding: 20px;
+}
+
+.chart-container {
+    width: 45%; /* Each chart takes 45% of the row width */
+    max-width: 650px; /* Limit maximum size */
+    min-width: 300px; /* Set minimum size for better visuals */
+    aspect-ratio: 1; /* Maintain 1:1 aspect ratio */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: white;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}

@@ -57,64 +57,89 @@ def signup(request):
     return render(request, 'signup.html')
 
 
+from django.shortcuts import render
+from django.db.models import Sum
+import json  # Import the JSON module
+
 def expense(request):
+    username = request.session.get('username', None)
+    categories = Category.objects.all()
 
-    username=request.session.get('username',None)
-    categories=Category.objects.all()
-
-    if request.method=='POST':
+    if request.method == 'POST':
         if 'bal' in request.POST:
-            amount=request.POST.get('bal')
+            amount = request.POST.get('bal')
             if amount:
                 Balance.objects.update_or_create(
                     user=request.user,
                     defaults={'balance': amount}
                 )
-        
-        elif 'add_expense' in request.POST:
-            price=float(request.POST['price'])
-            cat_id=request.POST['category']
-        
-            category=Category.objects.get(id=cat_id)
 
-            Expense.objects.create(category=category,price=price,user=request.user)
+        elif 'add_expense' in request.POST:
+            price = float(request.POST['price'])
+            cat_id = request.POST['category']
+
+            category = Category.objects.get(id=cat_id)
+
+            Expense.objects.create(category=category, price=price, user=request.user)
 
             return redirect('expense')
-        
+
         elif 'delete_expense' in request.POST:
             Expense.objects.filter(user=request.user).delete()
             return redirect('expense')
-        
+
         elif 'delete_one' in request.POST:
-            item=Expense.objects.order_by("-id").first()    #?????
+            item = Expense.objects.order_by("-id").first()  # Latest expense
             if item:
                 item.delete()
-    
-    expenses=Expense.objects.filter(user=request.user)
+
+    expenses = Expense.objects.filter(user=request.user)
 
     try:
-        b=Balance.objects.get(user=request.user)
+        b = Balance.objects.get(user=request.user)
+        salary=b.balance if b else 0
     except Balance.DoesNotExist:
-        b=None
+        salary=0
 
-    total_expense=sum(float(expense.price) for expense in expenses)
+    total_expense = sum(float(expense.price) for expense in expenses)
 
-    remaining_balance = b.balance - total_expense if b else 0 
+    remaining_balance = salary- total_expense if salary else 0
 
-    category_sum=(Expense.objects.filter(user=request.user).values('category__name').annotate(total=Sum('price')))
+    # Calculate category-wise totals
+    category_sum = Expense.objects.filter(user=request.user).values('category__name').annotate(total=Sum('price'))
+    category_names = [data['category__name'] for data in category_sum]
+    category_totals = [data['total'] for data in category_sum]
 
-    return render(request,'expensetracker.html',{
-        'username':username,
-        'categories':categories,
-        'expenses':expenses,
-        'total_expense':total_expense,
-        'category_wise_sum':category_sum,
-        'bal':b,
-        'remaining':remaining_balance})
+    # Serialize the data into JSON
+    category_names_json = json.dumps(category_names)
+    category_totals_json = json.dumps(category_totals)
+
+    data_points = [
+        {'label': 'Salary', 'value': salary},
+        {'label': 'Expenses', 'value': total_expense},
+        {'label': 'Remaining', 'value': remaining_balance},
+    ]
+
+    # Serialize data for the template
+    line_chart_data = json.dumps(data_points)
+
+    return render(request, 'expensetracker.html', {
+        'username': username,
+        'categories': categories,
+        'expenses': expenses,
+        'total_expense': total_expense,
+        'category_wise_sum': category_sum,
+        'bal': b,
+        'remaining': remaining_balance,
+        'category_names_json': category_names_json,  # Pass serialized data
+        'category_totals_json': category_totals_json,  # Pass serialized data
+        'line_chart_data': line_chart_data, 
+    })
+
 
 
 def export_expenses_to_csv(request):
-    
+     
     response = HttpResponse(content_type='text/csv')
     response['Content-Disposition'] = 'attachment; filename="expenses.csv"'
 

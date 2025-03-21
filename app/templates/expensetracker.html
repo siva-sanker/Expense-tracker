@@ -7,7 +7,7 @@
     <title>Expense Tracker</title>
     <link rel="shortcut icon" href="{% static 'images/expense.png' %}" type="image/x-icon">
     <link rel="stylesheet" href="{% static 'css/expensetracker.css' %}">
-    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 
 </head>
@@ -126,7 +126,38 @@
             </tr>
         </table>
 
+        <div class="charts">
+            <div class="chart-heading">
+                <h2>Spend Analytics</h2>
+            </div>
+            <div class="chart-grid">
+                <!-- Pie Chart -->
+                <div class="chart-container">
+                    <canvas id="expenseChart"></canvas>
+                </div>
+        
+                <!-- Line Chart -->
+                <div class="chart-container">
+                    <canvas id="lineChart"></canvas>
+                </div>
+            </div>
+        
+            <!-- Data Scripts -->
+            <script id="categoryNames" type="application/json">
+                {{ category_names_json|safe }}
+            </script>
+            <script id="categoryTotals" type="application/json">
+                {{ category_totals_json|safe }}
+            </script>
+            <script id="lineChartData" type="application/json">
+                {{ line_chart_data|safe }}
+            </script>
+        </div>
+        
+
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="{% static 'js/expense.js' %}"></script>
 </body>
 </html>
