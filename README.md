@@ -8,7 +8,7 @@ A simple and efficient web application for tracking your daily expenses and mana
 
 ✅ Add and categorize expenses easily.  
 ✅ View detailed expense history.  
-✅ Analyze spending with charts and graphs [tbd].  
+✅ Analyze spending with charts and graphs.  
 ✅ User-friendly and responsive design.  
 
 ---
@@ -57,7 +57,7 @@ Open your browser and go to:
    - Navigate to the "Expenses" page.
    - Filter expenses by category, or amount.
 
-3. **Analyze Spending [not done yet]** 📈  
+3. **Analyze Spending** 📈  
    - Visit the "Analytics" section.
    - View spending trends with graphs.
 
