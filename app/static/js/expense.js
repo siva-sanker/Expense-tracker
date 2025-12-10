@@ -22,8 +22,8 @@ const expenseChart = new Chart(ctx, {
         }
     }
 });
-console.log(categoryNames);
-console.log(categoryTotals);
+// console.log(categoryNames);
+// console.log(categoryTotals);
 
 const lineChartData = JSON.parse(document.getElementById('lineChartData').textContent);
 
@@ -68,3 +68,17 @@ const lineChart = new Chart(cty, {
         }
     }
 });
+
+// Function to show toast
+function showToast(title, message) {
+    document.getElementById('toastTitle').innerText = title;
+    document.getElementById('toastBody').innerText = message;
+    $('#messageToast').toast('show');
+    setTimeout(() => {
+        console.log('toast worked')
+    }, 5000);
+    
+}
+
+// Example usage:
+// showToast('Success', 'Category added successfully!');

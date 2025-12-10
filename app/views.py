@@ -6,7 +6,9 @@ from django.contrib.auth.hashers import make_password
 from django.urls import reverse
 from django.http import HttpResponse
 from django.db.models import Sum
+from django.db.models.functions import Round
 from .models import Category,Expense,Balance
+from django.contrib import messages
 import csv
 
 def home(request):
@@ -21,24 +23,20 @@ def signup(request):
             cpwd = request.POST['cpwd']
 
             if pwd != cpwd:
-                return HttpResponse(f'''
-                <script> alert("Passwords do not match!"); window.location.href = "{reverse('signup')}"; </script>
-                ''')
+                messages.error(request, "Passwords do not match!")
+                return redirect('signup')
 
             if User.objects.filter(username=uname).exists():
-                return HttpResponse(f'''
-                <script> alert("Username already exists!"); window.location.href = "{reverse('signup')}"; </script>
-                ''')
+                messages.error(request, "Username already exist!")
+                return redirect('signup')
             if User.objects.filter(email=mail).exists():
-                return HttpResponse(f'''
-                <script> alert("Email already exists!"); window.location.href = "{reverse('signup')}"; </script>
-                ''')
+                messages.error(request,"Email already exist!")
+                return redirect('signup')
 
             hashed_pwd = make_password(pwd)
             User.objects.create(username=uname, email=mail, password=hashed_pwd)
-            return HttpResponse(f'''
-            <script> alert("Registered successfully"); window.location.href = "{reverse('signup')}"; </script>
-            ''')
+            messages.success(request,"Registered Successfully!")
+            return redirect('signup')
 
         elif 'login' in request.POST:
             uname = request.POST['uname']
@@ -51,9 +49,8 @@ def signup(request):
                 print(user_id)
                 return redirect('expense')  # Redirect to your expense page
             else:
-                return HttpResponse(f'''
-                <script> alert("Invalid username or password!"); window.location.href = "{reverse('signup')}"; </script>
-                ''')
+                messages.error(request,"Invalid username or password!")
+                return redirect('signup')
     return render(request, 'signup.html')
 
 
@@ -94,19 +91,19 @@ def expense(request):
                 item.delete()
 
     expenses = Expense.objects.filter(user=request.user)
-
+    b=None
     try:
         b = Balance.objects.get(user=request.user)
         salary=b.balance if b else 0
     except Balance.DoesNotExist:
         salary=0
 
-    total_expense = sum(float(expense.price) for expense in expenses)
+    total_expense = round(sum(float(expense.price) for expense in expenses),2)
 
-    remaining_balance = salary- total_expense if salary else 0
+    remaining_balance = round(salary- total_expense,2) if salary else 0
 
     # Calculate category-wise totals
-    category_sum = Expense.objects.filter(user=request.user).values('category__name').annotate(total=Sum('price'))
+    category_sum = Expense.objects.filter(user=request.user).values('category__name').annotate(total=Round(Sum('price'),2))
     category_names = [data['category__name'] for data in category_sum]
     category_totals = [data['total'] for data in category_sum]
 
@@ -158,14 +155,9 @@ def export_expenses_to_csv(request):
 def logout_user(request):
     if request.user.is_authenticated: 
         Balance.objects.filter(user=request.user).delete()
- 
     logout(request)
-    return HttpResponse('''
-        <script>
-            alert("You have successfully logged out.");
-            window.location.href = "/signup/";
-        </script>
-    ''')
+    messages.success(request, "You have successfully logged out.")
+    return redirect('signup')
 
 def addc(request):
     if request.method == 'POST':
@@ -174,17 +166,7 @@ def addc(request):
             # Check if the category already exists
             if not Category.objects.filter(name=name).exists():
                 Category.objects.create(name=name)
-                return HttpResponse('''
-                    <script>
-                        alert("Category Added Successfully! ✅");
-                        window.location.href = "/expense";
-                    </script>
-                ''')
+                messages.success(request, "Category Added Successfully! ✅")
             else:
-                return HttpResponse('''
-                    <script>
-                        alert("Category already exists! ❗");
-                        window.location.href = "/expense";
-                    </script>
-                ''')
+                messages.warning(request, "Category already exists! ❗")
     return redirect('expense')

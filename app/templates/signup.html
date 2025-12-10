@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="{% static 'css/signupstyle.css' %}">
     <link rel="shortcut icon" href="{% static 'images/sign-up.png' %}" type="image/x-icon">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
   <body>
       <div class="container">
@@ -27,14 +28,14 @@
                       <a href="#">Forgot Password?</a>
                   </div>
 
-                  <button type="submit" class="btn" name="login">Login</button>
+                  <button type="submit" class="btn btn-primary" name="login">Login</button>
 
                   <p>or login with social platforms</p>
                   <div class="social-icons">
-                      <a href="#"><i class='bx bxl-google' ></i></a>
-                      <a href="#"><i class='bx bxl-facebook' ></i></a>
-                      <a href="#"><i class='bx bxl-github' ></i></a>
-                      <a href="#"><i class='bx bxl-linkedin' ></i></a>
+                      <a href=# onclick="showToast('Info','Social Media Login Not Yet enabled')"><i class='bx bxl-google' ></i></a>
+                      <a href=# onclick="showToast('Info','Social Media Login Not Yet enabled')"><i class='bx bxl-facebook' ></i></a>
+                      <a href=# onclick="showToast('Info','Social Media Login Not Yet enabled')"><i class='bx bxl-github' ></i></a>
+                      <a href=# onclick="showToast('Info','Social Media Login Not Yet enabled')"><i class='bx bxl-linkedin' ></i></a>
                   </div>
               </form>
           </div>
@@ -59,7 +60,7 @@
                     <input type="password" placeholder="Confirm Password" name="cpwd" required>
                     <i class='bx bxs-lock-alt' ></i>
                 </div>
-                  <button type="submit" class="btn" name="register">Register</button>
+                  <button type="submit" class="btn btn-primary" name="register">Register</button>
 
                   <!-- <p>or register with social platforms</p>
                   <div class="social-icons">
@@ -86,6 +87,32 @@
           </div>
       </div>
 
-      <script src="{% static 'js/signup.js' %}"></script>
+    <!-- Toast Container -->
+    <div aria-live="polite" aria-atomic="true" style="position: fixed; bottom: 20px; right: 20px; min-width: 250px; z-index: 9999;">
+        <!-- Toast -->
+        <div class="toast" id="messageToast" role="alert" aria-live="assertive" aria-atomic="true" data-delay="3000">
+            <div class="toast-header">
+                <strong class="mr-auto" id="toastTitle">Notice</strong>
+                <!-- <small class="text-muted">Now</small> -->
+                <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="toast-body" id="toastBody">
+                <!-- Message goes here -->
+            </div>
+        </div>
+    </div>
+    <script src="{% static 'js/signup.js' %}"></script>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        {% if messages %}
+            {% for message in messages %}
+                showToast("{{ message.tags|capfirst }}", "{{ message }}");
+            {% endfor %}
+        {% endif %}
+    </script>
+
   </body>
 </html>
