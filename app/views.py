@@ -9,7 +9,10 @@ from django.db.models import Sum
 from django.db.models.functions import Round
 from .models import Category,Expense,Balance
 from django.contrib import messages
+from django.shortcuts import render
+from django.db.models import Sum
 import csv
+import json
 
 def home(request):
     return render(request,'home.html')
@@ -53,14 +56,9 @@ def signup(request):
                 return redirect('signup')
     return render(request, 'signup.html')
 
-
-from django.shortcuts import render
-from django.db.models import Sum
-import json  # Import the JSON module
-
 def expense(request):
     username = request.session.get('username', None)
-    categories = Category.objects.all()
+    categories = Category.objects.filter(createdBy=request.user)
 
     if request.method == 'POST':
         if 'bal' in request.POST:
@@ -75,7 +73,7 @@ def expense(request):
             price = float(request.POST['price'])
             cat_id = request.POST['category']
 
-            category = Category.objects.get(id=cat_id)
+            category = Category.objects.get(id=cat_id,createdBy=request.user)
 
             Expense.objects.create(category=category, price=price, user=request.user)
 
@@ -164,8 +162,8 @@ def addc(request):
         name = request.POST.get('category')
         if name:
             # Check if the category already exists
-            if not Category.objects.filter(name=name).exists():
-                Category.objects.create(name=name)
+            if not Category.objects.filter(name=name,createdBy=request.user).exists():
+                Category.objects.create(name=name,createdBy=request.user)
                 messages.success(request, "Category Added Successfully! ✅")
             else:
                 messages.warning(request, "Category already exists! ❗")

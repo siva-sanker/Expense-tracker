@@ -74,10 +74,6 @@ function showToast(title, message) {
     document.getElementById('toastTitle').innerText = title;
     document.getElementById('toastBody').innerText = message;
     $('#messageToast').toast('show');
-    setTimeout(() => {
-        console.log('toast worked')
-    }, 5000);
-    
 }
 
 // Example usage:

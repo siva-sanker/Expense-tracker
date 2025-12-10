@@ -4,6 +4,7 @@ from django.utils.timezone import now
 # Create your models here.
 class Category(models.Model):
     name=models.CharField(max_length=30)
+    createdBy=models.ForeignKey(User,on_delete=models.CASCADE,related_name='categories',default=1)
 
 class Expense(models.Model):
     category=models.ForeignKey(Category,on_delete=models.CASCADE)
