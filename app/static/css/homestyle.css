@@ -98,3 +98,33 @@ footer {
     margin-top: 20px;
     font-size: 0.9em;
 }
+
+/* Add to homestyle.css */
+
+/* Page load animation */
+@keyframes pageLoad {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Animate the entire container with delay */
+.container {
+    animation: pageLoad 1s ease-out 0.2s both;
+}
+
+/* Initially hidden */
+.container {
+    opacity: 0;
+}
+
+/* Optional: Stagger animation for images */
+.img-div img {
+    animation: pageLoad 0.8s ease-out 0.5s both;
+    opacity: 0;
+}

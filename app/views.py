@@ -4,13 +4,15 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import logout
 from django.contrib.auth.hashers import make_password
 from django.urls import reverse
-from django.http import HttpResponse
+from django.http import HttpResponse,JsonResponse
 from django.db.models import Sum
 from django.db.models.functions import Round
 from .models import Category,Expense,Balance
 from django.contrib import messages
 from django.shortcuts import render
 from django.db.models import Sum
+from django.contrib.auth.decorators import login_required
+from django.views.decorators.cache import never_cache
 import csv
 import json
 
@@ -26,36 +28,31 @@ def signup(request):
             cpwd = request.POST['cpwd']
 
             if pwd != cpwd:
-                messages.error(request, "Passwords do not match!")
-                return redirect('signup')
+                return JsonResponse({'success': False, 'message': "Passwords do not match!"})
 
             if User.objects.filter(username=uname).exists():
-                messages.error(request, "Username already exist!")
-                return redirect('signup')
+                return JsonResponse({'success': False, 'message': "Username already exist!"})
             if User.objects.filter(email=mail).exists():
-                messages.error(request,"Email already exist!")
-                return redirect('signup')
+                return JsonResponse({'success': False, 'message': "Email already exist!"})
 
             hashed_pwd = make_password(pwd)
             User.objects.create(username=uname, email=mail, password=hashed_pwd)
-            messages.success(request,"Registered Successfully!")
-            return redirect('signup')
+            return JsonResponse({'success': True, 'message': "Registered Successfully!"})
 
         elif 'login' in request.POST:
             uname = request.POST['uname']
             pwd = request.POST['pwd']
             user = authenticate(username=uname, password=pwd)
             if user:
-                login(request, user)  # Logs in the user and starts a session
+                login(request, user)
                 request.session['username'] = uname
-                user_id=request.user.id
-                print(user_id)
-                return redirect('expense')  # Redirect to your expense page
+                # return JsonResponse({'success': True, 'message': "Login Successful!"})
             else:
-                messages.error(request,"Invalid username or password!")
-                return redirect('signup')
+                return JsonResponse({'success': False, 'message': "Invalid username or password!"})
     return render(request, 'signup.html')
 
+@login_required(login_url='signup')
+@never_cache
 def expense(request):
     username = request.session.get('username', None)
     categories = Category.objects.filter(createdBy=request.user)
@@ -160,11 +157,34 @@ def logout_user(request):
 def addc(request):
     if request.method == 'POST':
         name = request.POST.get('category')
-        if name:
-            # Check if the category already exists
-            if not Category.objects.filter(name=name,createdBy=request.user).exists():
-                Category.objects.create(name=name,createdBy=request.user)
-                messages.success(request, "Category Added Successfully! ✅")
-            else:
-                messages.warning(request, "Category already exists! ❗")
-    return redirect('expense')
+        # Check if exists
+        if Category.objects.filter(name=name, createdBy=request.user).exists():
+            return JsonResponse({
+                "status": "warning",
+                "message": "Category already exists! ❗"
+            })
+
+        # Create
+        category = Category.objects.create(name=name, createdBy=request.user)
+
+        # Build updated chart data
+        category_sum = Expense.objects.filter(user=request.user).values(
+            'category__name'
+        ).annotate(total=Round(Sum('price'), 2))
+
+        chart_names = [c['category__name'] for c in category_sum]
+        chart_totals = [c['total'] for c in category_sum]
+
+        return JsonResponse({
+            "status": "success",
+            "message": "Category Added Successfully! ✅",
+            "id": category.id,
+            "name": category.name,
+            "chartNames": chart_names,
+            "chartTotals": chart_totals
+        })
+
+    return JsonResponse({
+        "status": "error",
+        "message": "Invalid request method"
+    })

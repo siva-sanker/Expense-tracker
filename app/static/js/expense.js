@@ -78,3 +78,59 @@ function showToast(title, message) {
 
 // Example usage:
 // showToast('Success', 'Category added successfully!');
+$(document).ready(function () {
+    $("#addCategoryForm").submit(function (e) {
+        e.preventDefault();   // Stop normal form submit
+
+        let categoryName = $("#categoryName").val();
+
+        $.ajax({
+            url: ADD_CATEGORY_URL,
+            method: "POST",
+            data: {
+                category: categoryName,
+                csrfmiddlewaretoken: CSRF_TOKEN
+            },
+            success: function (response) {
+
+                if (response.status === "success") {
+
+                    // Close modal
+                    $("#addCategoryModal").modal("hide");
+
+                    // Clear input
+                    $("#categoryName").val("");
+
+                    // Show toast
+                    showToast("Success", response.message);
+
+                    // Inject new category into dropdown immediately
+                    $("select[name='category']").append(
+                        `<option value="${response.id}" class="text-capitalize">${response.name}</option>`
+                    );
+
+                    // Update chart data
+                    updateCharts(response.chartNames, response.chartTotals);
+                } 
+                else {
+                    showToast("Error", response.message);
+                }
+            },
+            error: function () {
+                showToast("Error", "Something went wrong!");
+            }
+        });
+    });
+});
+
+
+// ------------------------------------------------------
+// 🔥 Function to update charts dynamically without reload
+// ------------------------------------------------------
+function updateCharts(names, totals) {
+
+    // Update pie chart
+    expenseChart.data.labels = names;
+    expenseChart.data.datasets[0].data = totals;
+    expenseChart.update();
+}

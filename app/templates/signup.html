@@ -14,7 +14,7 @@
   <body>
       <div class="container d-md-block d-sm-none">
           <div class="form-box login">
-              <form method="post">
+              <form method="post" id="loginForm">
                 {% csrf_token %}
                   <h1>Login</h1>
                   <div class="input-box">
@@ -42,7 +42,7 @@
           </div>
 
           <div class="form-box register">
-              <form method="post">
+              <form method="post" id="registerForm">
                 {% csrf_token %}
                   <h1>Registration</h1>
                   <div class="input-box">
@@ -61,7 +61,7 @@
                     <input type="password" placeholder="Confirm Password" name="cpwd" required>
                     <i class='bx bxs-lock-alt' ></i>
                 </div>
-                  <button type="submit" class="btn btn-primary" name="register">Register</button>
+                  <button type="submit" class="btn btn" name="register">Register</button>
 
                   <!-- <p>or register with social platforms</p>
                   <div class="social-icons">
@@ -120,7 +120,7 @@
             <!-- ✅ REGISTRATION FORM -->
             <div class="tab-pane fade" id="register">
                 <h3>Register</h3>
-                <form method="post">
+                <form method="post" id="registerForm">
                     {% csrf_token %}
                     <div class="form-group">
                         <input type="text" class="form-control" placeholder="Username" name="uname" required>
@@ -162,6 +162,11 @@
             </div>
         </div>
     </div>
+    <script>
+        const SIGNUP_URL = "{% url 'signup' %}";
+        const EXPENSE_URL = "{% url 'expense' %}";
+        const CSRF_TOKEN = "{{ csrf_token }}";
+    </script>
     <script src="{% static 'js/signup.js' %}"></script>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>

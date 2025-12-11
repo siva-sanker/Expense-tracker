@@ -204,6 +204,13 @@
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        const ADD_BALANCE_URL = "{% url 'expense' %}";
+        const ADD_EXPENSE_URL = "{% url 'expense' %}";
+        const ADD_CATEGORY_URL = "{% url 'add' %}";
+        const CSRF_TOKEN = "{{ csrf_token }}";
+    </script>
+
     <script src="{% static 'js/expense.js' %}"></script>
     <script>
         {% if messages %}

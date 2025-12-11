@@ -27,5 +27,48 @@ function showToast(title, message) {
     $('#messageToast').toast('show');    
 }
 
-// Example usage:
-// showToast('Success', 'Category added successfully!');
+// --- AJAX form submission ---
+document.getElementById('registerForm').addEventListener('submit', function(e){
+    e.preventDefault();  // prevent page reload
+    const formData = new FormData(this);
+    formData.append("register","1");
+    
+    fetch(SIGNUP_URL, {
+        method: "POST",
+        headers: {'X-CSRFToken': CSRF_TOKEN},
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if(data.success){
+            showToast('Success', data.message);
+            this.reset();
+            container.classList.remove('active')
+        } else {
+            showToast('Error', data.message);
+        }
+    })
+    .catch(err => console.log(err));
+});
+
+document.getElementById('loginForm').addEventListener('submit', function(e){
+    e.preventDefault();
+    const formData = new FormData(this);
+    formData.append("login","1");
+
+    fetch(SIGNUP_URL, {
+        method: "POST",
+        headers: {'X-CSRFToken': CSRF_TOKEN},
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if(data.success){
+            showToast('Success', data.message);
+            window.location.href = EXPENSE_URL;  // redirect after login
+        } else {
+            showToast('Error', data.message);
+        }
+    })
+    .catch(err => console.log(err));
+});
